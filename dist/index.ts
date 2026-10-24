@@ -817,8 +817,9 @@ import { EditorStatusWidget } from "@narumitw/pi-tui-kit/editor-status-widget";
 var STATUS_KEY = "plan-mode";
 var PLAN_WIDGET_KEY = "plan-mode-plan";
 var BIDI_CONTROLS = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/gu;
-function updatePlanModeUi(ctx, state, toolSummary) {
+function updatePlanModeUi(pi, ctx, state, toolSummary) {
   ctx.ui.setStatus(STATUS_KEY, formatStatus(state));
+  pi.events.emit("plan-mode-state", { enabled: state.enabled });
   let lines;
   if (state.enabled && state.latestPlan) {
     lines = ["Proposed plan ready", "Use /plan to implement, save, revise, or exit Plan mode."];
@@ -2621,7 +2622,7 @@ ${intent.plan}`,
     return false;
   }
   function updateUi(ctx) {
-    updatePlanModeUi(ctx, state, formatToolSummary);
+    updatePlanModeUi(pi, ctx, state, formatToolSummary);
   }
   function clearUi(ctx) {
     clearPlanModeUi(ctx);

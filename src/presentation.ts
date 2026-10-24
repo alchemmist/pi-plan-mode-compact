@@ -7,8 +7,9 @@ const STATUS_KEY = "plan-mode";
 const PLAN_WIDGET_KEY = "plan-mode-plan";
 const BIDI_CONTROLS = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/gu;
 
-export function updatePlanModeUi(ctx: ExtensionContext, state: PlanModeState, toolSummary: () => string) {
+export function updatePlanModeUi(pi: ExtensionAPI, ctx: ExtensionContext, state: PlanModeState, toolSummary: () => string) {
   ctx.ui.setStatus(STATUS_KEY, formatStatus(state));
+  pi.events.emit("plan-mode-state", { enabled: state.enabled });
   let lines: string[] | undefined;
   if (state.enabled && state.latestPlan) {
     lines = ["Proposed plan ready", "Use /plan to implement, save, revise, or exit Plan mode."];
